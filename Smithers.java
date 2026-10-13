@@ -46,7 +46,7 @@ public class Smithers extends Actor
     public void spawnObstacles() {
         if (elaspedTime > goonSpawnTime) {
             Goon s = new Goon();
-            getWorld().addObject(s, 600, 250);
+            getWorld().addObject(s, getWorld().getWidth(), 380);
             if (spamAttack) {
                 goonSpawnTime = elaspedTime + 240;
             } else {
@@ -83,12 +83,12 @@ public class Smithers extends Actor
         
         if (vert) {
             setLocation(getX(), getY() + vertSpeed);
-            if (getY() >= 93) {
+            if (getY() >= 420) {
                 vert = !vert;
             }
         } else {
             setLocation(getX(), getY() - vertSpeed);
-            if (getY() < 40) {
+            if (getY() < 300) {
                 vert = !vert;
             }
         }
@@ -189,7 +189,7 @@ public class Smithers extends Actor
             sound.play();
             Homer homer = (Homer) getWorld().getObjects(Homer.class).get(0);
             if (homer != null) {
-                homer.setLocation(world.getWidth() / 2, world.getHeight() - 30);
+                homer.setLocation(world.getWidth() / 2, 380);
                 world.addObject(glove, homer.getX() + 62, homer.getY() - 22);
             }
         }
