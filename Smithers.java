@@ -146,8 +146,9 @@ public class Smithers extends Actor
     }
     
     public void checkHit() {
-        if (isTouching (Homer.class) && canBeHurt && !invulnerable)
+        if (isTouching (BowlingBall.class) && canBeHurt && !invulnerable)
         {
+            removeTouching(BowlingBall.class);
             canBeHurt = false;
             Greenfoot.playSound("enemy_scream.wav");
             if (health <= 30) {

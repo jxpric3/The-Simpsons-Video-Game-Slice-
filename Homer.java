@@ -40,7 +40,12 @@ public class Homer extends Actor
         if(throwCooldown > 0)
         {
             throwCooldown -= 1; 
+            if(throwCooldown == 0)
+            {
+                setImage("homer_stand.png");
+            }
         }
+       
     }
     
     public boolean movement() {
@@ -126,11 +131,23 @@ public class Homer extends Actor
     
     public void hitObjects()
     {
-        if (isTouching (Goon.class) )
-        {
-            loseLife();
-            Greenfoot.playSound("homer_doh.wav");
+        Actor goon = getOneIntersectingObject(Goon.class);
+        if(goon != null){
+            if(!hitDebounce){
+                hitDebounce = true; 
+                hitDebounceTick = elaspedTime +180; 
+                loseLife();
+                Greenfoot.playSound("homer_doh.wav"); 
+                
+            }
+            if(goon.getX() > getX()){
+                goon.setLocation(goon.getX() + 40, getY());
+                }
+            else{
+                goon.setLocation(goon.getX() - 40, getY()); 
+            }
         }
+      
         if (isTouching (HurtBox.class) && !hitDebounce )
         {
             hitDebounce = true;
