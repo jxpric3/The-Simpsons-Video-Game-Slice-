@@ -72,6 +72,8 @@ public class Goon extends Actor
            if(hp ==0){
                setImage("goon_fall_2.png");
                hurtTimer = 20;
+               Homer h = getWorld().getObjects(Homer.class).get(0);
+               h.addPoints(100);
            }
            else{
                setImage("goon_hurt.png");
