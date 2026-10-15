@@ -148,10 +148,10 @@ public class Smithers extends Actor
             canBeHurt = false;
             Greenfoot.playSound("enemy_scream.wav");
             if (health <= 30) {
-                health = health - 5;
+                health = health - 10;
             }
             else {
-                health = health - 10;
+                health = health - 20;
             }
             hurtTime = (5 * 60);
             
