@@ -11,6 +11,7 @@ public class Goon extends Actor
     int hp =2; 
     int hurtTimer = 0; 
     boolean facingRight = true; 
+    int speed = 2; 
     /**
      * Act - do whatever the Goon wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -33,23 +34,21 @@ public class Goon extends Actor
         }
         Homer h = getWorld().getObjects(Homer.class).get(0);
         
-        if(h.getX() < getX())
-        {
-            setLocation(getX() -2, getY()); 
-            if(facingRight){
-                facingRight = false; 
-                setImage("goon_walk_0.png"); 
-                getImage().mirrorHorizontally();
-                
-            }
-        }
-        else if(h.getX() > getX()){
-            setLocation(getX() + 2, getY());
-            if(!facingRight){
-                facingRight = true;
-                setImage("goon_walk_0.png");
-            }
-        }
+           setLocation(getX() + speed, getY());
+
+          // Bounce off the right wall
+          if (getX() >= getWorld().getWidth() - 1) {
+              speed = -2;
+              facingRight = false;
+              setImage("goon_walk_0.png");
+              getImage().mirrorHorizontally();
+          }
+          // Bounce off the left wall
+          else if (getX() <= 0) {
+              speed = 2;
+              facingRight = true;
+              setImage("goon_walk_0.png");
+          }
         
         if(h.getY() < getY()){
             setLocation(getX(), getY() -1); 
