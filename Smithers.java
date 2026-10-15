@@ -184,6 +184,7 @@ public class Smithers extends Actor
             deathSceneLength = elaspedTime + (4*60);
             Stage1 world = (Stage1)getWorld();
             world.stopMusic();
+            world.stopScrolling();
             GreenfootSound sound = new GreenfootSound("inevitable.wav");
             sound.setVolume(75);
             sound.play();
