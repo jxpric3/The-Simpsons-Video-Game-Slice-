@@ -61,7 +61,7 @@ public class Homer extends Actor
     
     public boolean movement() {
         boolean moving = false;
-        if (Greenfoot.isKeyDown("right") && getX() < 450) {
+        if (Greenfoot.isKeyDown("right") && getX() < 750) {
             setLocation(getX() + speed, getY());
             moving = true;
         }

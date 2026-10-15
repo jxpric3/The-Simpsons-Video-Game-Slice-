@@ -10,7 +10,7 @@ public class Donut extends Actor
 {
     private int fallSpeed = 1;
     private boolean onGround = false;
-    private int groundY = 350;  
+    private int groundY = 400;  
 
     public Donut() {
         GreenfootImage img = getImage();

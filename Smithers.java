@@ -28,8 +28,11 @@ public class Smithers extends Actor
     int vertSpeed = 1;
     
     
-    private int goonSpawnTime = 120;
     private int bombSpawnTime = 350;
+    public Smithers() {
+            getImage().mirrorHorizontally();
+    }
+    
     public void act()
     {
         if (!activateDeath) {
@@ -44,16 +47,6 @@ public class Smithers extends Actor
     }
     
     public void spawnObstacles() {
-        if (elaspedTime > goonSpawnTime) {
-            Goon s = new Goon();
-            getWorld().addObject(s, 600, 250);
-            if (spamAttack) {
-                goonSpawnTime = elaspedTime + 240;
-            } else {
-                goonSpawnTime = elaspedTime + Greenfoot.getRandomNumber(300) + 120;
-            }
-            
-         }
         if (elaspedTime > bombSpawnTime && elaspedTime != 0) {
             Bomb s = new Bomb();
             Homer homer = getWorld().getObjects(Homer.class).get(0);
@@ -73,22 +66,26 @@ public class Smithers extends Actor
             setLocation(getX() - horzSpeed, getY());
             if (getX() <= 100) {
                 horz = !horz;
+                getImage().mirrorHorizontally();
+
             }
         } else {
             setLocation(getX() + horzSpeed, getY());
             if (getX() > getWorld().getWidth() - 100) {
                 horz = !horz;
+                getImage().mirrorHorizontally();
+
             }
         }
         
         if (vert) {
             setLocation(getX(), getY() + vertSpeed);
-            if (getY() >= 93) {
+            if (getY() >= 420) {
                 vert = !vert;
             }
         } else {
             setLocation(getX(), getY() - vertSpeed);
-            if (getY() < 40) {
+            if (getY() < 300) {
                 vert = !vert;
             }
         }
@@ -160,6 +157,7 @@ public class Smithers extends Actor
             
             if (health <= 60 && hurtTime == (5 * 60)) {
                 setImage("smithers_hurt_0.png");
+                getImage().mirrorHorizontally();
             }
         }
         if (!canBeHurt) {
@@ -189,7 +187,7 @@ public class Smithers extends Actor
             sound.play();
             Homer homer = (Homer) getWorld().getObjects(Homer.class).get(0);
             if (homer != null) {
-                homer.setLocation(world.getWidth() / 2, world.getHeight() - 30);
+                homer.setLocation(world.getWidth() / 2, 380);
                 world.addObject(glove, homer.getX() + 62, homer.getY() - 22);
             }
         }
