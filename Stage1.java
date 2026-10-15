@@ -18,6 +18,7 @@ public class Stage1 extends World
      private int spawnTimer = 0;
     private int wave = 0;
     private boolean bossOut = false;
+    private boolean scrolling = true;
     /**
      * Constructor for objects of class Stage1.
      * 
@@ -41,11 +42,13 @@ public class Stage1 extends World
     public void act() 
     { 
         checkWave(); 
-        if(scrollPosition < 0) { 
-             scrollPosition = scrollingImage.getWidth(); 
-         }
-         scrollPosition -= scrollSpeed; 
-         paint(scrollPosition); 
+        if (scrolling){
+              if(scrollPosition < 0) {
+                  scrollPosition = scrollingImage.getWidth();
+              }
+              scrollPosition -= scrollSpeed;
+              paint(scrollPosition);
+          }
          
         elaspedTime += 1;   
         
@@ -123,6 +126,10 @@ public class Stage1 extends World
     {
         bgMusic.pause();     
     }
+    public void stopScrolling()
+      {
+          scrolling = false;
+      }
     public void stopMusic()
     {
         bgMusic.stop(); 

@@ -190,7 +190,6 @@ public class Smithers extends Actor
             Homer homer = (Homer) getWorld().getObjects(Homer.class).get(0);
             if (homer != null) {
                 homer.setLocation(world.getWidth() / 2, 380);
-                world.addObject(glove, homer.getX() + 62, homer.getY() - 22);
             }
         }
         if (elaspedTime >= deathSceneLength) {
