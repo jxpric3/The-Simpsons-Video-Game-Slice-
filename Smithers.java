@@ -46,7 +46,7 @@ public class Smithers extends Actor
     public void spawnObstacles() {
         if (elaspedTime > goonSpawnTime) {
             Goon s = new Goon();
-            getWorld().addObject(s, getWorld().getWidth(), 380);
+            getWorld().addObject(s, 600, 250);
             if (spamAttack) {
                 goonSpawnTime = elaspedTime + 240;
             } else {
@@ -83,12 +83,12 @@ public class Smithers extends Actor
         
         if (vert) {
             setLocation(getX(), getY() + vertSpeed);
-            if (getY() >= 420) {
+            if (getY() >= 93) {
                 vert = !vert;
             }
         } else {
             setLocation(getX(), getY() - vertSpeed);
-            if (getY() < 300) {
+            if (getY() < 40) {
                 vert = !vert;
             }
         }
@@ -146,9 +146,8 @@ public class Smithers extends Actor
     }
     
     public void checkHit() {
-        if (isTouching (BowlingBall.class) && canBeHurt && !invulnerable)
+        if (isTouching (Homer.class) && canBeHurt && !invulnerable)
         {
-            removeTouching(BowlingBall.class);
             canBeHurt = false;
             Greenfoot.playSound("enemy_scream.wav");
             if (health <= 30) {
@@ -190,7 +189,7 @@ public class Smithers extends Actor
             sound.play();
             Homer homer = (Homer) getWorld().getObjects(Homer.class).get(0);
             if (homer != null) {
-                homer.setLocation(world.getWidth() / 2, 380);
+                homer.setLocation(world.getWidth() / 2, world.getHeight() - 30);
                 world.addObject(glove, homer.getX() + 62, homer.getY() - 22);
             }
         }

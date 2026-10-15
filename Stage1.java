@@ -30,10 +30,10 @@ public class Stage1 extends World
         bgMusic.playLoop();
         
         Homer d = new Homer();
-        addObject(d, 80, 380);
+        addObject(d, 50, 175);
         
         Smithers boss = new Smithers();
-        addObject(boss,700,340);
+        addObject(boss,560,40);
     }
     public void act() 
     { 
@@ -54,7 +54,7 @@ public class Stage1 extends World
     }
     private void spawnAmbulance() {
         DonutTruck a = new DonutTruck();
-        addObject(a, 0, 430); 
+        addObject(a, 0, 50); 
     }
     /** 
       * Paint scrolling image at given position and make sure the rest of 

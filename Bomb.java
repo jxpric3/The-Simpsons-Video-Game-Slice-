@@ -52,7 +52,7 @@ public class Bomb extends Actor
         }
         else {
             move(5);
-            if (getY() > 400) {
+            if (getY() > getWorld().getHeight() - 5) {
                 setRotation(0);
                 setLocation(getX(), getY() - 30);
                 setImage("boom_0.png");

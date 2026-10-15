@@ -11,13 +11,18 @@ public class Homer extends Actor
     private int speed = 3;
     private int Lives = 3;
     private int Points = 0;
+    int gravity = 1;
+    int jumpPower = 8;
+    boolean holdingJump = false;
+    boolean falling = true;
     boolean hitDebounce = false;
     int hitDebounceTick = 0;
+    int yVelocity = 0;
+    int tickRate = 15; // If you want speeds slower than 1 pixel per frame.
     int elaspedTime = 0;
-    boolean facingRight = true; 
-    int throwCooldown = 0; 
-    
-    
+    int maxJumpDist = 100;
+    int rotateAnimTickRate = 15;
+    int movingRotation = 25;
     
     /**
      * Act - do whatever the Homer wants to do. This method is called whenever
@@ -32,78 +37,68 @@ public class Homer extends Actor
     public void act()
     {
         elaspedTime += 1;
-        movement();
+        if (movement() && !(holdingJump || falling)) {
+            if (elaspedTime % rotateAnimTickRate == 0) {
+                movingRotation = -movingRotation;
+                setRotation(movingRotation);
+            }
+        } else if (holdingJump || falling){
+            if (falling) {
+                if (!(getRotation() % 360 == 0)) {
+                    setRotation(getRotation() + 30);   
+                }
+            } else {
+                setRotation(getRotation() + 30);
+            }
+        } else {
+            setRotation(0);
+        }
+        gravity();
         showStatus();
         hitObjects();
         testEndGame();
-        
-        if(throwCooldown > 0)
-        {
-            throwCooldown -= 1; 
-            if(throwCooldown == 0)
-            {
-                setImage("homer_stand.png");
-            }
-        }
-       
     }
     
     public boolean movement() {
         boolean moving = false;
-        
-        if (Greenfoot.isKeyDown("right") && getX() < 750) {
+        if (Greenfoot.isKeyDown("right") && getX() < 450) {
             setLocation(getX() + speed, getY());
             moving = true;
-            if(!facingRight){
-                facingRight = true; 
-                setImage("homer_stand.png");
-            }
-                
         }
         if (Greenfoot.isKeyDown("left")) {
-            setLocation(getX() - speed, getY());
+            setLocation(getX() - Math.max(speed + 2, 1), getY());
             moving = true;
-            if(facingRight = true){
-                facingRight = false; 
-                setImage("homer_stand.png"); 
-                getImage().mirrorHorizontally(); 
+        }
+        if (Greenfoot.isKeyDown("up")) {
+            if (!falling) {
+                holdingJump = true;
+                setLocation(getX(), getY() - jumpPower);
+                if (getY() < maxJumpDist    ) {
+                    falling = true;
+                }
             }
         }
-        if (Greenfoot.isKeyDown("up") && getY() > 250) {
-            setLocation(getX(), getY()-2);
+        else if (holdingJump) {
+            falling = true;
+            holdingJump = false;
+            yVelocity = 0;
         }
-        if (Greenfoot.isKeyDown("down") && getY() < 440) {
-            setLocation(getX(), getY() + 2);
-        }
-        
-        if (Greenfoot.isKeyDown("space") && throwCooldown == 0) {
-            setLocation(getX(), getY() + 2);
-            int ballX; 
-            if(facingRight){
-                ballX = getX() +40; 
-                
-            }
-            else{
-                ballX = getX() -40; 
-            }
-            getWorld().addObject(new BowlingBall(facingRight), ballX, getY() - 10); 
-            throwCooldown = 20; 
-            
-            if(facingRight == true)
-            {
-                setImage("homer_throw_1.png");
-            }
-            else
-            {
-                setImage("homer_throw_1.png");
-                getImage().mirrorHorizontally(); 
-            }
-        }
-
-       
         return moving;
     }
     
+    public void gravity() {
+        if (!falling) {
+            return;
+        }
+        setLocation(getX(), Math.min(getY() + yVelocity, 250));
+        if (getY() == 250) {
+            falling = false;
+        }
+        if (elaspedTime % tickRate != 0) {
+            return;
+        }
+        yVelocity = Math.max(yVelocity - gravity, 5);
+    }
     
     public void showStatus()
     {
@@ -131,23 +126,11 @@ public class Homer extends Actor
     
     public void hitObjects()
     {
-        Actor goon = getOneIntersectingObject(Goon.class);
-        if(goon != null){
-            if(!hitDebounce){
-                hitDebounce = true; 
-                hitDebounceTick = elaspedTime +180; 
-                loseLife();
-                Greenfoot.playSound("homer_doh.wav"); 
-                
-            }
-            if(goon.getX() > getX()){
-                goon.setLocation(goon.getX() + 40, getY());
-                }
-            else{
-                goon.setLocation(goon.getX() - 40, getY()); 
-            }
+        if (isTouching (Goon.class) )
+        {
+            loseLife();
+            Greenfoot.playSound("homer_doh.wav");
         }
-      
         if (isTouching (HurtBox.class) && !hitDebounce )
         {
             hitDebounce = true;
