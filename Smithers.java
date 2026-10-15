@@ -28,8 +28,11 @@ public class Smithers extends Actor
     int vertSpeed = 1;
     
     
-    private int goonSpawnTime = 120;
     private int bombSpawnTime = 350;
+    
+    public Smithers() {
+          getImage().mirrorHorizontally();
+      }
     public void act()
     {
         if (!activateDeath) {
@@ -44,16 +47,7 @@ public class Smithers extends Actor
     }
     
     public void spawnObstacles() {
-        if (elaspedTime > goonSpawnTime) {
-            Goon s = new Goon();
-            getWorld().addObject(s, getWorld().getWidth(), 380);
-            if (spamAttack) {
-                goonSpawnTime = elaspedTime + 240;
-            } else {
-                goonSpawnTime = elaspedTime + Greenfoot.getRandomNumber(300) + 120;
-            }
-            
-         }
+       
         if (elaspedTime > bombSpawnTime && elaspedTime != 0) {
             Bomb s = new Bomb();
             Homer homer = getWorld().getObjects(Homer.class).get(0);
@@ -73,11 +67,13 @@ public class Smithers extends Actor
             setLocation(getX() - horzSpeed, getY());
             if (getX() <= 100) {
                 horz = !horz;
+                getImage().mirrorHorizontally();
             }
         } else {
             setLocation(getX() + horzSpeed, getY());
             if (getX() > getWorld().getWidth() - 100) {
                 horz = !horz;
+                getImage().mirrorHorizontally();
             }
         }
         
@@ -95,7 +91,7 @@ public class Smithers extends Actor
         
         if (health <= 30) {
             if (!soundPlayed) {         
-                Greenfoot.playSound("204912__noxdl__didgeridoo-monster-roar.mp3");
+                Greenfoot.playSound("enemy_laugh.wav");
                 soundPlayed = true;     
             } 
             horzSpeed = 7;
@@ -117,7 +113,7 @@ public class Smithers extends Actor
         }
         else if (health <= 60) {
             if (!soundPlayed) {         
-                Greenfoot.playSound("204912__noxdl__didgeridoo-monster-roar.mp3");
+                Greenfoot.playSound("enemy_laugh.wav");
                 soundPlayed = true;     
             } 
             horzSpeed = 6;
@@ -161,6 +157,9 @@ public class Smithers extends Actor
             
             if (health <= 60 && hurtTime == (5 * 60)) {
                 setImage("smithers_hurt_0.png");
+                 if (horz) {
+                      getImage().mirrorHorizontally();
+                  }
             }
         }
         if (!canBeHurt) {
