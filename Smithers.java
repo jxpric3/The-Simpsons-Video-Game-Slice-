@@ -28,8 +28,11 @@ public class Smithers extends Actor
     int vertSpeed = 1;
     
     
-    private int goonSpawnTime = 120;
     private int bombSpawnTime = 350;
+    
+    public Smithers() {
+          getImage().mirrorHorizontally();
+      }
     public void act()
     {
         if (!activateDeath) {
@@ -44,16 +47,7 @@ public class Smithers extends Actor
     }
     
     public void spawnObstacles() {
-        if (elaspedTime > goonSpawnTime) {
-            Goon s = new Goon();
-            getWorld().addObject(s, 600, 250);
-            if (spamAttack) {
-                goonSpawnTime = elaspedTime + 240;
-            } else {
-                goonSpawnTime = elaspedTime + Greenfoot.getRandomNumber(300) + 120;
-            }
-            
-         }
+       
         if (elaspedTime > bombSpawnTime && elaspedTime != 0) {
             Bomb s = new Bomb();
             Homer homer = getWorld().getObjects(Homer.class).get(0);
@@ -73,29 +67,31 @@ public class Smithers extends Actor
             setLocation(getX() - horzSpeed, getY());
             if (getX() <= 100) {
                 horz = !horz;
+                getImage().mirrorHorizontally();
             }
         } else {
             setLocation(getX() + horzSpeed, getY());
             if (getX() > getWorld().getWidth() - 100) {
                 horz = !horz;
+                getImage().mirrorHorizontally();
             }
         }
         
         if (vert) {
             setLocation(getX(), getY() + vertSpeed);
-            if (getY() >= 93) {
+            if (getY() >= 420) {
                 vert = !vert;
             }
         } else {
             setLocation(getX(), getY() - vertSpeed);
-            if (getY() < 40) {
+            if (getY() < 300) {
                 vert = !vert;
             }
         }
         
         if (health <= 30) {
             if (!soundPlayed) {         
-                Greenfoot.playSound("204912__noxdl__didgeridoo-monster-roar.mp3");
+                Greenfoot.playSound("enemy_laugh.wav");
                 soundPlayed = true;     
             } 
             horzSpeed = 7;
@@ -117,7 +113,7 @@ public class Smithers extends Actor
         }
         else if (health <= 60) {
             if (!soundPlayed) {         
-                Greenfoot.playSound("204912__noxdl__didgeridoo-monster-roar.mp3");
+                Greenfoot.playSound("enemy_laugh.wav");
                 soundPlayed = true;     
             } 
             horzSpeed = 6;
@@ -146,20 +142,24 @@ public class Smithers extends Actor
     }
     
     public void checkHit() {
-        if (isTouching (Homer.class) && canBeHurt && !invulnerable)
+        if (isTouching (BowlingBall.class) && canBeHurt && !invulnerable)
         {
+            removeTouching(BowlingBall.class);
             canBeHurt = false;
             Greenfoot.playSound("enemy_scream.wav");
             if (health <= 30) {
-                health = health - 5;
+                health = health - 10;
             }
             else {
-                health = health - 10;
+                health = health - 20;
             }
             hurtTime = (5 * 60);
             
             if (health <= 60 && hurtTime == (5 * 60)) {
                 setImage("smithers_hurt_0.png");
+                 if (horz) {
+                      getImage().mirrorHorizontally();
+                  }
             }
         }
         if (!canBeHurt) {
@@ -184,13 +184,13 @@ public class Smithers extends Actor
             deathSceneLength = elaspedTime + (4*60);
             Stage1 world = (Stage1)getWorld();
             world.stopMusic();
+            world.stopScrolling();
             GreenfootSound sound = new GreenfootSound("inevitable.wav");
             sound.setVolume(75);
             sound.play();
             Homer homer = (Homer) getWorld().getObjects(Homer.class).get(0);
             if (homer != null) {
-                homer.setLocation(world.getWidth() / 2, world.getHeight() - 30);
-                world.addObject(glove, homer.getX() + 62, homer.getY() - 22);
+                homer.setLocation(world.getWidth() / 2, 380);
             }
         }
         if (elaspedTime >= deathSceneLength) {

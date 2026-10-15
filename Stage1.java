@@ -16,6 +16,9 @@ public class Stage1 extends World
      private int elaspedTime = 0;
      private int nextSpawn = Greenfoot.getRandomNumber(600) + 300; 
      private int spawnTimer = 0;
+    private int wave = 0;
+    private boolean bossOut = false;
+    private boolean scrolling = true;
     /**
      * Constructor for objects of class Stage1.
      * 
@@ -30,18 +33,22 @@ public class Stage1 extends World
         bgMusic.playLoop();
         
         Homer d = new Homer();
-        addObject(d, 50, 175);
+        addObject(d, 80, 380);
         
-        Smithers boss = new Smithers();
-        addObject(boss,560,40);
+        addObject(new HealthBar(d), 75, 22);
+        
+       
     }
     public void act() 
     { 
-         if(scrollPosition < 0) { 
-             scrollPosition = scrollingImage.getWidth(); 
-         }
-         scrollPosition -= scrollSpeed; 
-         paint(scrollPosition); 
+        checkWave(); 
+        if (scrolling){
+              if(scrollPosition < 0) {
+                  scrollPosition = scrollingImage.getWidth();
+              }
+              scrollPosition -= scrollSpeed;
+              paint(scrollPosition);
+          }
          
         elaspedTime += 1;   
         
@@ -54,8 +61,47 @@ public class Stage1 extends World
     }
     private void spawnAmbulance() {
         DonutTruck a = new DonutTruck();
-        addObject(a, 0, 50); 
+        addObject(a, 0, 430); 
     }
+    
+    private void checkWave() {
+          if (getObjects(Goon.class).isEmpty() && !bossOut) {
+              wave++;
+
+              if (wave == 1) {
+                  spawnGoons(3);
+              }
+              else if (wave == 2) {
+                  spawnGoons(5);
+              }
+              else if (wave == 3) {
+                  spawnGoons(7);
+              }
+              else if (wave == 4) {
+                  addObject(new Smithers(), 700, 340);
+                  bossOut = true;
+              }
+          }
+
+          showText("Wave " + wave, 700, 30);
+
+          if (bossOut) {
+              showText("BOSS", 700, 50);
+          }
+      }
+      
+      private void spawnGoons(int n) {
+          for (int i = 0; i < n; i++) {
+              int x = getWidth() - 1 - (i * 60);
+              int y = 300 + Greenfoot.getRandomNumber(140)
+                  + (i * 10);
+
+              // Keep each Goon within the world's vertical bounds.
+              y = Math.min(y, getHeight() - 1);
+
+              addObject(new Goon(), x, y);
+          }
+      }
     /** 
       * Paint scrolling image at given position and make sure the rest of 
       * the background is also painted with the same image. 
@@ -80,6 +126,10 @@ public class Stage1 extends World
     {
         bgMusic.pause();     
     }
+    public void stopScrolling()
+      {
+          scrolling = false;
+      }
     public void stopMusic()
     {
         bgMusic.stop(); 
