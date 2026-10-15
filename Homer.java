@@ -109,6 +109,7 @@ public class Homer extends Actor
     
     public void showStatus()
     {
+        getWorld().showText("Score: " + Points, 400, 30); 
         
     }
     
@@ -134,6 +135,15 @@ public class Homer extends Actor
     public int getLives()
     {
         return Lives;
+    }
+    
+    public void addPoints(int amount){
+        Points = Points + amount;     
+    }
+    
+    public int getPoints()
+    {
+        return Points;
     }
     
     public void hitObjects()
